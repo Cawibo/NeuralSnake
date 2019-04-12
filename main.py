@@ -8,15 +8,19 @@ import numpy
 
 
 def generate_minds(n):
+	""" Generate n neural networks """
 	return [Neural() for _ in range(n)]
 
 def create_snakes(n):
+	""" Create n snakes """
 	return [Snake(5, 5, mind) for mind in generate_minds(n)]
 
 def create_games(n, snakes):
+	""" Create n games """
 	return [Game([snake]) for snake in snakes]
 
 def evaluate_generation(snakes):
+	""" Evaluate a generation of snakes """
 	games = create_games(len(snakes), snakes)
 	running_count = len(snakes)
 
@@ -28,37 +32,6 @@ def evaluate_generation(snakes):
 
 	games = sorted(games, key=lambda game:game.snakes[0].score, reverse=True)
 	return [snake for snake in [game.snakes[0] for game in games]]
-
-# def test(n, gens, times):
-
-# 	data = [0 for _ in range(gens)]
-
-# 	for t in range(times):
-# 		snakes = create_snakes(n)
-# 		for gen in range(gens):		
-# 			snakes = evaluate_generation(snakes)
-
-# 			food_list = [s.food for s in snakes]
-# 			data[gen] += max(food_list)
-
-# 			survivors = snakes[:n//10]		
-
-# 			snakes = survivors +\
-# 				[Snake(5, 5, Neural.overcross(choice(survivors), choice(survivors), mutate=True)) for _ in range(n-len(survivors))]
-
-# 		print(t/times*100, "% done")
-# 	return [d/times for d in data]
-
-# import matplotlib.pyplot as plt
-# import pylab
-
-# data = test(1000, 100, 100)
-# for row in data:
-# 	print(row)
-
-# fig = plt.figure()
-# plt.plot(data)
-# plt.show()
 
 if __name__ == "__main__":
 	pygame.init()
@@ -124,10 +97,3 @@ if __name__ == "__main__":
 		print(len(snakes))
 		# snakes = survivors +\
 		# 	[Snake(5, 5, Neural.overcross(choice(survivors), choice(survivors), mutate=True)) for _ in range(n-len(survivors))]survivors
-
-	# print(data)
-	# with open("data10.out", "a") as f:
-	# 	for gen in data:
-	# 		print(gen)
-	# 		f.write(", ".join(map(str, gen)))
-	# 		f.write("\n")

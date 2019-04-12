@@ -43,10 +43,21 @@ class Neural:
 		return res
 
 	def mutate(s1):
+		""" 
+			Currently unused: see overcross.
+			Mutations are introduced by flipping bits at random throughout the 'snake'.
+		"""
 		s2 = "".join([b if random()<0.1 else str(1-int(b)) for b in s1.neural.snake])
 		return Neural(snake=s2)
 
 	def overcross(s1, s2, mutate=False):
+		"""
+			Creates a new 'snake' from two given 'snakes' by splitting at the same index and concatting.
+
+			If mutate is set, the result 'snake' will be affected by mutation.
+
+			More info: https://en.wikipedia.org/wiki/Crossover_(genetic_algorithm)
+		"""
 		cut_off = randint(0,len(s1.neural.snake))
 		s3 = s1.neural.snake[:cut_off] + s2.neural.snake[cut_off:]
 
@@ -104,65 +115,3 @@ if __name__ == "__main__":
 
 	# c = Neural.procreate(a, b)
 	# print(c)
-
-
-
-
-
-
-
-#	class NeuralNetwork():
-# 	class Link():
-# 		def __init__(self, frm, to, weight):
-# 			self.frm = frm
-# 			self.to = to
-# 			self.weight = weight
-
-# 	class Node():
-# 		def __init__(self):
-# 			self.value = -1
-# 			self.forward_links = []
-# 			self.backward_links = []
-
-# 	def __init__(self, input, hidden, output):
-# 		self.input_layer = [Node() for _ in range(input)]
-# 		self.hidden_layer = [Node() for _ in range(hidden)]
-# 		self.output_layer = [Node() for _ in range(output)]
-
-# 		for i_n in self.input_layer:
-# 			for h_n in self.hidden_layer:
-# 				l = Link(i_n, h_n, random.random())
-# 				i_n.forward_links.append(l)
-# 				h_n.backward_links.append(l)
-# 				for o_n in self.output_layer:
-# 					l = Link(h_n, o_n, random.random())
-# 					h_n.forward_links.append(l)
-# 					o_n.backward_links.append(l)
-
-# 	def propagate(self, layer):
-# 		for n in layer:
-# 			if n.backward_links: ## Have parent nodes
-# 				n.value /= len(n.backward_links)
-# 			if n.forward_links:
-# 				for l in n.forward_links:
-# 					l.to.value += n.value * l.weight
-
-# 	def evaluate(self, input):
-# 		if len(input) != len(self.input_layer):
-# 			print("FLER FÄRRE INVÄRDEN ÄN DET FINNS IN-NODER")
-
-# 		for i, n in enumerate(self.input_layer):
-# 			n.value = input[i]
-
-# 		propagate(self.input_layer)
-# 		propagate(self.hidden_layer)
-# 		propagate(self.output_layer)
-
-# 		highest_index = 0
-# 		highest_value = 0
-# 		for i, n in enumerate(self.output_layer):
-# 			if n.value > highest_value:
-# 				highest_value = n.value
-# 				highest_index = i
-
-# 		return i

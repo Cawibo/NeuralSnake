@@ -7,6 +7,7 @@ from NeuralString import Neural
 from random import randint
 
 class Colors:
+	""" Allows for more readable color usage in pygame """
 	BLACK = pygame.Color(0, 0, 0)
 	WHITE = pygame.Color(255, 255, 255)
 	RED = pygame.Color(255, 0, 0)
@@ -23,31 +24,39 @@ class Game:
 		self.alive_snakes = len(snakes)
 
 	def print_board(self):
+		""" Outputs the current state on std.out """
 		for row in self.board:
 			for value in row:
 				print("0" if value is None else value[0], end=" ")
 			print()
 
 	def clear_board(self):
+		""" Returns a clear board """
 		self.board = [[None for _ in range(self.width)] for _ in range(self.height)]
 
 	def kill_snake(self, snake):
+		""" 'Kills' the given snake """
 		self.alive_snakes -= 1
 		snake.score -= 25
 		snake.dead = True
 
 	def reset_food(self):
+		""" Puts a new piece of food somewhere on the bord """
 		self.food = [randint(1, self.width-1), randint(1, self.height-1)]
 
 	def over(self):
+		""" Returns true if the game is over """
 		return self.alive_snakes == 0
 
 	def update(self):
-		# rensa boarden
-		# uppdatera ormarna
-		# rita ut ormarna
-		# rita ut maten
+		"""
+			The update-loop...
 
+			1. clear the board
+			2. update snakes
+			3. draw the board
+
+		"""
 
 		self.clear_board()
 
@@ -94,32 +103,41 @@ class Game:
 		self.board[self.food[1]][self.food[0]] = "FOOD"
 
 	def is_coord_wall(self, coord):
+		""" Returns whether a coordinate is a wall or not """
 		return (coord[1] < 0 or coord[1] >= self.width or
 				coord[0] < 0 or coord[0] >= self.height or
 				self.board[coord[1]][coord[0]] == "SNAKE")
 
 	def get_distance_head_food(self, snake, food):
+		""" Returns the distance between the head tile and the food tile """
 		return abs(abs(snake.body[0][0]) - abs(food[0]))  +abs(abs(snake.body[0][1]) - abs(food[1]))
 
 	def is_wall_left_of_snake(self, snake):
+		""" Returns whether the tile directly left of the head is a wall """
 		return self.is_coord_wall(snake.get_coord_left())
 
 	def is_wall_right_of_snake(self, snake):
+		""" Returns whether the tile directly right of the head is a wall """
 		return self.is_coord_wall(snake.get_coord_right())
 
 	def is_snake_facing_wall(self, snake):
+		""" Returns whether the tile directly in front of the head is a wall """
 		return self.is_coord_wall(snake.get_coord_facing())
 
 	def is_food_left_of_snake(self, snake, food):
+		""" Returns whether the food is to the left of the snake (same x/y-coord) """
 		return self.is_food_in_direction(snake, food, snake.get_direction_of_left())
 
 	def is_food_right_of_snake(self, snake, food):
+		""" Returns whether the food is to the right of the snake (same x/y-coord) """
 		return self.is_food_in_direction(snake, food, snake.get_direction_of_right())
 
 	def is_snake_facing_food(self, snake, food):
+		""" Returns whether the food is in front of the snake """
 		return self.is_food_in_direction(snake, food, snake.facing)
 
 	def is_food_in_direction(self, snake, food, direction):
+		""" Returns whether the food is in the given direction or not """
 		head_at = snake.body[0]
 		sign = lambda a: a>0
 		if head_at[1] == food[1]:
@@ -135,6 +153,7 @@ class Game:
 		return False
 
 	def draw(self, window, x_offset, y_offset):
+		""" draw the board """
 		for y, row in enumerate(self.board):
 			for x, column in enumerate(row):
 				elem = self.board[y][x]
